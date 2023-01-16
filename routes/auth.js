@@ -8,8 +8,8 @@ const jwt = require("jsonwebtoken");
 router.post("/register", async (req, res) => {
   //prueba
   try {
-    const { username, email, password } = req.body;
-    if (!username && !password && !email) {
+    const { username, password } = req.body;
+    if (!username && !password) {
       return res.json({
         status: "bad",
         msg: "Casi...",
@@ -51,7 +51,6 @@ router.post("/register", async (req, res) => {
     const newUser = await new User({
       username,
       password: hashedPass,
-      email: email.trim().toLowerCase(),
     });
     //guardando usuario en la base de datos
     const savedUser = await newUser.save();
