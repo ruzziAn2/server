@@ -8,8 +8,8 @@ const jwt = require("jsonwebtoken");
 router.post("/register", async (req, res) => {
   //prueba
   try {
-    const { username, email, password } = req.body;
-    if (!username && !password && !email) {
+    const { username, email, password, fullname, gender } = req.body;
+    if (!username || !password || !email || !fullname || !gender) {
       return res.json({
         status: "bad",
         msg: "Casi...",
@@ -30,10 +30,10 @@ router.post("/register", async (req, res) => {
       });
     }
     //error contraseña muy corta
-    if (password.trim().length < 5) {
+    if (password.trim().length < 6) {
       return res.json({
         status: "bad",
-        msg: "La contraseña debe tener al menos 5 caracteres",
+        msg: "La contraseña debe tener al menos 6 caracteres",
       });
     }
     //buscando si el usuario que se quiere crear existe
@@ -52,6 +52,8 @@ router.post("/register", async (req, res) => {
       username,
       password: hashedPass,
       email: email.toLowerCase(),
+      fullname,
+      gender
     });
     //guardando usuario en la base de datos
     const savedUser = await newUser.save();
