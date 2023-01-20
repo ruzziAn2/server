@@ -9,14 +9,18 @@ const checkUser = async (req, res, next) => {
       return res.json({ status: "bad", msg: "Token not found" });
     }
 
-    const verifiedToken = await jwt.verify(token, "tokensecret", (err) => {
-      if (err) {
-        return res.json({
-          status: "bad",
-          msg: "Unauthorized or invalid token",
-        });
+    const verifiedToken = await jwt.verify(
+      token,
+      process.env.TOKEN_KEYWORD,
+      (err) => {
+        if (err) {
+          return res.json({
+            status: "bad",
+            msg: "Unauthorized or invalid token",
+          });
+        }
       }
-    });
+    );
 
     if (!verifiedToken) {
       return res.json({ status: "bad", msg: "Unauthorized" });
@@ -36,20 +40,24 @@ checkAdmin = async (req, res, next) => {
       return res.json({ status: "bad", msg: "Token not found" });
     }
 
-    const verifiedToken = await jwt.verify(token, "tokensecret", (err) => {
-      if (err) {
-        return res.json({
-          status: "bad",
-          msg: "Unauthorized or invalid token",
-        });
+    const verifiedToken = await jwt.verify(
+      token,
+      process.env.TOKEN_KEYWORD,
+      (err) => {
+        if (err) {
+          return res.json({
+            status: "bad",
+            msg: "Unauthorized or invalid token",
+          });
+        }
       }
-    });
+    );
 
     if (!verifiedToken) {
       return res.json({ status: "bad", msg: "Unauthorized" });
     }
 
-    if (verifiedToken.user.username !== "adminotap") {
+    if (verifiedToken.user.username !== process.env.ADMIN_LOGIN) {
       return res.json({
         status: "bad",
         msg: "Usuario de administrador invalido",

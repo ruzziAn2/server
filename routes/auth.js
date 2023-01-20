@@ -29,7 +29,7 @@ router.post("/register", async (req, res) => {
         msg: "20 caracteres tenes papá",
       });
     }
-    if (username === "adminotap") {
+    if (username === process.env.ADMIN_LOGIN) {
       return res.json({
         status: "bad",
         msg: "Nombre de usuario en uso",
@@ -64,7 +64,10 @@ router.post("/register", async (req, res) => {
     //guardando usuario en la base de datos
     const savedUser = await newUser.save();
 
-    const token = await jwt.sign({ user: existUser }, "tokensecret");
+    const token = await jwt.sign(
+      { user: existUser },
+      process.env.TOKEN_KEYWORD
+    );
     //response/respuesta exitosa
     res.json({
       status: "OK",
@@ -109,7 +112,10 @@ router.post("/login", async (req, res) => {
       });
     }
 
-    const token = await jwt.sign({ user: existUser }, "tokensecret");
+    const token = await jwt.sign(
+      { user: existUser },
+      process.env.TOKEN_KEYWORD
+    );
 
     // const decodedToken = await jwt.decode()
 
@@ -135,13 +141,16 @@ router.post("/admin", async (req, res) => {
         msg: "usuario o contraseña incorrectas",
       });
     }
-    if (username !== "adminotap") {
+    if (username !== process.env.ADMIN_LOGIN) {
       return res.json({ status: "bad", msg: "usuario incorrecto" });
     }
-    if (password !== "admin1234") {
+    if (password !== process.env.ADMIN_PASS) {
       return res.json({ status: "bad", msg: "contraseña incorrecta" });
     }
-    const token = jwt.sign({ user: { username, password } }, "tokensecret");
+    const token = jwt.sign(
+      { user: { username, password } },
+      process.env.TOKEN_KEYWORD
+    );
 
     res.json({
       status: "ok",

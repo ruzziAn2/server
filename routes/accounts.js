@@ -10,12 +10,12 @@ router.put("/:id", checkUser, async (req, res) => {
   try {
     const { username } = req.body.account;
     const token = req.headers.authorization?.split(" ")[1];
-    const verifiedUser = jwt.verify(token, "tokensecret");
+    const verifiedUser = jwt.verify(token, process.env.TOKEN_KEYWORD);
     const currentUser = await User.findById(req.params.id);
 
     if (
       currentUser._id.toString() !== verifiedUser.user._id &&
-      verifiedUser.user.username !== "adminotap"
+      verifiedUser.user.username !== process.env.ADMIN_LOGIN
     ) {
       return res.json({
         status: "bad",
@@ -31,7 +31,7 @@ router.put("/:id", checkUser, async (req, res) => {
       return res.json({ status: "bad", msg: "Nombre de usuario existente" });
     }
 
-    if (username === "adminotap") {
+    if (username === process.env.ADMIN_LOGIN) {
       return res.json({
         status: "bad",
         msg: "Nombre de usuario en uso",
@@ -55,12 +55,12 @@ router.put("/:id", checkUser, async (req, res) => {
 router.get("/:id", checkUser, async (req, res) => {
   try {
     const token = req.headers.authorization?.split(" ")[1];
-    const verifiedUser = jwt.verify(token, "tokensecret");
+    const verifiedUser = jwt.verify(token, process.env.TOKEN_KEYWORD);
     const currentUser = await User.findById(req.params.id);
 
     if (
       currentUser._id.toString() !== verifiedUser.user._id &&
-      verifiedUser.user.username !== "adminotap"
+      verifiedUser.user.username !== process.env.ADMIN_LOGIN
     ) {
       return res.json({
         status: "bad",
@@ -92,12 +92,12 @@ router.get("/get/all", checkAdmin, async (req, res) => {
 router.delete("/:id", async (req, res) => {
   try {
     const token = req.headers.authorization?.split(" ")[1];
-    const verifiedUser = jwt.verify(token, "tokensecret");
+    const verifiedUser = jwt.verify(token, process.env.TOKEN_KEYWORD);
     const currentUser = await User.findById(req.params.id);
 
     if (
       currentUser._id.toString() !== verifiedUser.user._id &&
-      verifiedUser.user.username !== "adminotap"
+      verifiedUser.user.username !== process.env.ADMIN_LOGIN
     ) {
       return res.json({
         status: "bad",
