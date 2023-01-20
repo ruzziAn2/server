@@ -29,8 +29,14 @@ router.post("/register", async (req, res) => {
         msg: "20 caracteres tenes papá",
       });
     }
+    if (username === "adminotap") {
+      return res.json({
+        status: "bad",
+        msg: "Nombre de usuario en uso",
+      });
+    }
     //error contraseña muy corta
-    if (password.trim().length < 6) {
+    if (password.length < 6) {
       return res.json({
         status: "bad",
         msg: "La contraseña debe tener al menos 6 caracteres",
@@ -53,7 +59,7 @@ router.post("/register", async (req, res) => {
       password: hashedPass,
       email: email.toLowerCase(),
       fullname,
-      gender
+      gender,
     });
     //guardando usuario en la base de datos
     const savedUser = await newUser.save();
@@ -112,6 +118,34 @@ router.post("/login", async (req, res) => {
       status: "OK",
       msg: "se ingreso correctamente",
       user: existUser,
+      token,
+    });
+  } catch (error) {
+    console.log(error.message);
+  }
+});
+
+// Admin login
+router.post("/admin", async (req, res) => {
+  try {
+    const { username, password } = req.body;
+    if (!username || password) {
+      return res.json({
+        status: "bad",
+        msg: "usuario o contraseña incorrectas",
+      });
+    }
+    if (username !== "adminotap") {
+      return res.json({ status: "bad", msg: "usuario incorrecto" });
+    }
+    if (password !== "admin1234") {
+      return res.json({ status: "bad", msg: "contraseña incorrecta" });
+    }
+    const token = jwt.sign({ user: { username, password } }, "tokensecret");
+
+    res.json({
+      status: "ok",
+      msg: "cuenta administrador reconocida, iniciando sesion",
       token,
     });
   } catch (error) {

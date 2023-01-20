@@ -9,26 +9,28 @@ const userSchema = new Schema(
     },
     email: {
       type: String,
-      unique: true,
+      required: true,
     },
     password: {
       type: String,
       required: true,
     },
-    fullname:{
+    fullname: {
       type: String,
-      required: true
+      required: true,
     },
-    gender:{
+    gender: {
       type: String,
-      required: true
+      required: true,
     },
-    age:{
+    age: {
       type: String,
+      required: true,
       default: "",
     },
-    city:{
+    city: {
       type: String,
+      required: true,
       default: "",
     },
     createdAt: "",

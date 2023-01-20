@@ -3,8 +3,11 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const app = express();
 
-app.use(cors({ origin: "*" }));
+//Built-in middleware
 app.use(express.json());
+
+//third-party middleware
+app.use(cors({ origin: "*" }));
 
 //mongodb+srv://<username>:<password>@yendono-llegando.diplpux.mongodb.net/?retryWrites=true&w=majority
 mongoose
@@ -22,6 +25,7 @@ app.get("/", (req, res) => {
   res.send("Hola Camus");
 });
 
+//router-level middleware
 app.use("/api/v1/auth", require("./routes/auth"));
 app.use("/api/v1/accounts", require("./routes/accounts"));
 
